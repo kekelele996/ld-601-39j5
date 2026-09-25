@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS accessible_facility (
   status TEXT,
   last_checked_at TEXT,
   owner_department TEXT,
-  note TEXT
+  note TEXT,
+  base_status TEXT
 );
 
 CREATE TABLE IF NOT EXISTS route_plan (
@@ -30,7 +31,8 @@ CREATE TABLE IF NOT EXISTS route_plan (
   risk_level TEXT,
   estimated_minutes TEXT,
   facility_ids TEXT,
-  created_at TEXT
+  created_at TEXT,
+  base_risk_level TEXT
 );
 
 CREATE TABLE IF NOT EXISTS assistance_request (
@@ -52,7 +54,11 @@ CREATE TABLE IF NOT EXISTS barrier_report (
   description TEXT,
   photo_url TEXT,
   verify_status TEXT,
-  priority TEXT
+  priority TEXT,
+  reviewer TEXT,
+  reviewed_at TEXT,
+  review_note TEXT,
+  affected_route_ids TEXT
 );
 
 CREATE TABLE IF NOT EXISTS audit_log (

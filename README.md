@@ -57,6 +57,20 @@ backend/src/routes, controllers, services, models, repositories, middlewares, co
 - MobilityType: constants/MobilityType、types/MobilityType、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - FacilityStatus: constants/FacilityStatus、types/FacilityStatus、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - AssistanceStatus: constants/AssistanceStatus、types/AssistanceStatus、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
+- VerifyStatus（PENDING 待审 / APPROVED 通过 / REJECTED 驳回 / CLOSED 关闭）:
+  - 前端：`constants/VerifyStatus.ts`、`types/VerifyStatus.ts`、`constants/statusText.ts`、`utils/formatters.ts`、`utils/barrierReview.ts`、`mocks/localDb.ts`、`pages/ReportsPage.tsx` 筛选器与按钮显隐。
+  - 后端：`constants/VerifyStatus.ts`、`models/BarrierReport.ts`、`utils/barrierReview.ts`、`services/BarrierReportService.ts`、`controllers/BarrierReportController.ts`、`routes/BarrierReportRoutes.ts`、`seed.ts`。
+- RiskLevel（LOW / MEDIUM / HIGH）: `constants/RiskLevel.ts`、`utils/formatters.ts`、`hooks/useRouteRisk.ts`、`pages/RoutesPage.tsx`，后端 `constants/RiskLevel.ts`、`utils/barrierReview.ts`、`seed.ts`。
+
+## 障碍工单审核流程
+
+工单在 `/reports` 页处理，接口为 `POST /api/barrier-report/:id/review`，动作 `approve | reject | close`：
+
+- **通过（approve）**：仅“待审”可通过。对应设施被停用（`BLOCKED`，通过时锁定 `base_status` 基线），包含该设施的路线风险升到“高”（锁定 `base_risk_level` 基线）。
+- **驳回（reject）**：仅“待审”可驳回，不改动任何设施与路线。
+- **关闭（close）**：待审直接关闭不产生影响；已通过工单关闭时只回退这张工单造成的影响——同设施仍有其他“通过未关闭”工单时保持停用/高风险，否则恢复各自基线。设施当前若被巡检标记为“维修中”，回退时保持维修不变（巡检入口在 `/facilities` 页）。
+- **重复处理**：已处于通过/驳回/关闭的工单再次提交时返回 `409 REPORT_ALREADY_PROCESSED`，响应体带回当前状态与处理人，设施和路线不再变化；页面显示当前状态与处理人并禁用处理按钮。
+- 设施与路线的联动结果由后端在审核响应中一并返回并写入对应 Zustand store，切回 `/routes` 或 `/facilities` 页仍可看到新的风险等级、受影响设施与停用原因；后端不可达时前端走 `mocks/localDb.ts` 内置的同一套审核引擎并用 localStorage 持久化。
 
 ## 为什么会牵一发动全身
 
