@@ -1,1 +1,1 @@
-export const ERROR_MESSAGES = { AUTH_REQUIRED: "missing bearer token", RBAC_DENIED: "role denied", VALIDATION_FAILED: "invalid payload", RATE_LIMITED: "too many requests" };
+export const ERROR_MESSAGES = { AUTH_REQUIRED: "missing bearer token", RBAC_DENIED: "role denied", VALIDATION_FAILED: "invalid payload", RATE_LIMITED: "too many requests", REPORT_NOT_FOUND: "barrier report not found", INVALID_REVIEW_ACTION: "invalid review action", FACILITY_NOT_FOUND: "accessible facility not found", INVALID_FACILITY_STATUS: "invalid facility status" };

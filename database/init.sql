@@ -52,7 +52,10 @@ CREATE TABLE IF NOT EXISTS barrier_report (
   description TEXT,
   photo_url TEXT,
   verify_status TEXT,
-  priority TEXT
+  priority TEXT,
+  handled_by TEXT,
+  handled_at TEXT,
+  applied_effects TEXT
 );
 
 CREATE TABLE IF NOT EXISTS audit_log (

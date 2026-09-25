@@ -57,6 +57,16 @@ backend/src/routes, controllers, services, models, repositories, middlewares, co
 - MobilityType: constants/MobilityType、types/MobilityType、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - FacilityStatus: constants/FacilityStatus、types/FacilityStatus、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - AssistanceStatus: constants/AssistanceStatus、types/AssistanceStatus、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
+- VerifyStatus/ReviewAction（障碍工单审核：PENDING/APPROVED/REJECTED/CLOSED）: 前后端 constants/BarrierReportStatus、types/BarrierReport、constructors/BarrierReport*、logTemplates、errorMessages、utils/barrierReportWorkflow（前端离线状态机）、services/BarrierReportService（后端状态机）、ReportsPage 审核按钮与状态展示均有引用。
+
+## 障碍工单审核流程
+
+- 工单初始为 `PENDING`（待审），可执行通过 / 驳回 / 关闭：`POST /api/barrier-report/:id/review`，请求体 `{ "action": "APPROVE|REJECT|CLOSE", "operator": "处理人" }`。
+- 通过：对应设施状态置为 `BLOCKED`（停用），包含该设施的路线风险升为 `HIGH`，并在工单的 `applied_effects` 中快照变更前的设施状态与路线风险。
+- 驳回 / 关闭：仅回退本工单 `applied_effects` 记录的影响——设施或路线当前值仍等于本工单写入的值时才还原；巡检等其他来源的修改（如设施被标为 `MAINTENANCE`）保持不变。
+- 重复处理同一工单：接口返回 `changed: false` 与当前状态、处理人，设施与路线不再变化。
+- 设施巡检：`POST /api/accessible-facility/:id/status`，请求体 `{ "status": "AVAILABLE|BLOCKED|MAINTENANCE|UNKNOWN" }`。
+- 前端审核结果会同步到 BarrierReport / AccessibleFacility / RoutePlan 三个 store，切回路线页仍能看到最新风险等级与受影响设施；后端不可用时由 `utils/barrierReportWorkflow` 在本地执行同一状态机。
 
 ## 为什么会牵一发动全身
 

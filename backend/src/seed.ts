@@ -38,7 +38,7 @@ export const seed = {
       "name": "name 1",
       "location_code": "location code 1",
       "floor": "floor 1",
-      "status": "BLOCKED",
+      "status": "AVAILABLE",
       "last_checked_at": "2026-06-11T09:00:00Z",
       "owner_department": "owner department 1",
       "note": "note 1"
@@ -90,8 +90,8 @@ export const seed = {
       "risk_level": "MEDIUM",
       "estimated_minutes": "estimated minutes 2",
       "facility_ids": [
-        1,
-        2
+        2,
+        3
       ],
       "created_at": "2026-06-12T09:00:00Z"
     },
@@ -105,7 +105,7 @@ export const seed = {
       "estimated_minutes": "estimated minutes 3",
       "facility_ids": [
         1,
-        2
+        3
       ],
       "created_at": "2026-06-13T09:00:00Z"
     }
@@ -150,8 +150,11 @@ export const seed = {
       "barrier_type": "LOW_VISION",
       "description": "description 1",
       "photo_url": "/mock/photo_url-1.png",
-      "verify_status": "BLOCKED",
-      "priority": "priority 1"
+      "verify_status": "PENDING",
+      "priority": "priority 1",
+      "handled_by": null,
+      "handled_at": null,
+      "applied_effects": null
     },
     {
       "id": 2,
@@ -160,8 +163,11 @@ export const seed = {
       "barrier_type": "WHEELCHAIR",
       "description": "description 2",
       "photo_url": "/mock/photo_url-2.png",
-      "verify_status": "MAINTENANCE",
-      "priority": "priority 2"
+      "verify_status": "PENDING",
+      "priority": "priority 2",
+      "handled_by": null,
+      "handled_at": null,
+      "applied_effects": null
     },
     {
       "id": 3,
@@ -170,8 +176,11 @@ export const seed = {
       "barrier_type": "ELDERLY",
       "description": "description 3",
       "photo_url": "/mock/photo_url-3.png",
-      "verify_status": "AVAILABLE",
-      "priority": "priority 3"
+      "verify_status": "PENDING",
+      "priority": "priority 3",
+      "handled_by": null,
+      "handled_at": null,
+      "applied_effects": null
     }
   ]
 } as const;
